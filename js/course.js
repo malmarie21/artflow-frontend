@@ -17,3 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// course.js
+import { notifyUser } from './notifications.js';
+
+const enrollButton = document.querySelector('.btn--full');
+
+enrollButton.addEventListener('click', () => {
+  const courseName = document.querySelector('.course-hero__overlay h2').textContent;
+  
+  // Обычное уведомление через alert
+  alert(`Вы записались на курс: ${courseName}`);
+
+  // Браузерное уведомление
+  notifyUser(`Вы записались на курс: ${courseName}`);
+});
