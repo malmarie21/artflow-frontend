@@ -32,3 +32,45 @@ enrollButton.addEventListener('click', () => {
   // Браузерное уведомление
   notifyUser(`Вы записались на курс: ${courseName}`);
 });
+
+// js/course.js
+import { fetchCourses, enrollCourse } from './api.js';
+
+const coursesGrid = document.querySelector('.courses__grid');
+const enrollButtons = document.querySelectorAll('.btn--full');
+
+async function loadCourses() {
+  const courses = await fetchCourses();
+  coursesGrid.innerHTML = ''; // очищаем сетку
+
+  courses.forEach(course => {
+    const card = document.createElement('article');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <img src="img/venus.jpg" alt="${course.title}" />
+      <div class="course-card__info">
+        <h4>${course.title}</h4>
+        <p><strong>4500 руб.</strong> →</p>
+      </div>
+    `;
+    coursesGrid.appendChild(card);
+  });
+}
+
+loadCourses();
+
+// Обработка кнопки «Записаться» на странице course.html
+enrollButtons.forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const courseId = 1; // для примера, можно брать из data-атрибута
+    const userName = prompt('Введите ваше имя:');
+    if (!userName) return;
+
+    const result = await enrollCourse(courseId, userName);
+    if (result) {
+      alert(`Вы успешно записались на курс, ${userName}!`);
+    } else {
+      alert('Ошибка при записи. Попробуйте позже.');
+    }
+  });
+});
